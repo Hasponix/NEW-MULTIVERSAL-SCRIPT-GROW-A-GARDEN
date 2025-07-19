@@ -1,0 +1,5 @@
+loadstring(game:HttpGet("https://raw.githubusercontent.com/Hasponix/NEW-MULTIVERSAL-GROW-A-GARDEN-SCRIPT/refs/heads/main/script.lua"))()
+
+loadstring(game:HttpGet("https://raw.githubusercontent.com/f4shn/main/refs/heads/main/games/gagvisual.lua"))()
+
+loadstring(game:HttpGet("https://rawscripts.net/raw/Universal-Script-Simple-Shader-37434"))()
