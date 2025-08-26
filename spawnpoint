@@ -1,10 +1,9 @@
--- 📌 Multi-Spawn Teleport Script (with Remove option + Clickable Credit)
+-- 📌 Multi-Spawn Teleport Script (with Remove option + Minimize)
 -- Made for Roblox Exploit Environment
 
 -- Services
 local Players = game:GetService("Players")
 local player = Players.LocalPlayer
-local HttpService = game:GetService("HttpService")
 
 -- Table to hold saved locations
 local savedSpawns = {}
@@ -13,6 +12,7 @@ local savedSpawns = {}
 local ScreenGui = Instance.new("ScreenGui")
 ScreenGui.Parent = game.CoreGui
 
+-- Main Frame
 local MainFrame = Instance.new("Frame")
 MainFrame.Size = UDim2.new(0, 220, 0, 320)
 MainFrame.Position = UDim2.new(0.05, 0, 0.2, 0)
@@ -22,21 +22,47 @@ MainFrame.Active = true
 MainFrame.Draggable = true
 MainFrame.Parent = ScreenGui
 
+-- Title Bar
+local TitleBar = Instance.new("Frame")
+TitleBar.Size = UDim2.new(1, 0, 0, 30)
+TitleBar.BackgroundColor3 = Color3.fromRGB(80, 0, 150)
+TitleBar.Parent = MainFrame
+
 local Title = Instance.new("TextLabel")
-Title.Size = UDim2.new(1, 0, 0, 30)
-Title.Text = "📍 Spawn Points"
-Title.BackgroundColor3 = Color3.fromRGB(80, 0, 150)
+Title.Size = UDim2.new(0.85, 0, 1, 0)
+Title.Text = "Saved Spawn Points"
+Title.BackgroundTransparency = 1
 Title.TextColor3 = Color3.new(1,1,1)
-Title.Parent = MainFrame
+Title.Font = Enum.Font.SourceSansBold
+Title.TextSize = 18
+Title.Parent = TitleBar
+
+-- Minimize Button
+local MinimizeBtn = Instance.new("TextButton")
+MinimizeBtn.Size = UDim2.new(0.15, 0, 1, 0)
+MinimizeBtn.Position = UDim2.new(0.85, 0, 0, 0)
+MinimizeBtn.BackgroundColor3 = Color3.fromRGB(100, 0, 180)
+MinimizeBtn.TextColor3 = Color3.new(1,1,1)
+MinimizeBtn.Font = Enum.Font.SourceSansBold
+MinimizeBtn.TextSize = 18
+MinimizeBtn.Text = "-"
+MinimizeBtn.Parent = TitleBar
+
+-- Container for content
+local ContentFrame = Instance.new("Frame")
+ContentFrame.Size = UDim2.new(1, 0, 1, -30)
+ContentFrame.Position = UDim2.new(0, 0, 0, 30)
+ContentFrame.BackgroundTransparency = 1
+ContentFrame.Parent = MainFrame
 
 -- Scrolling frame for list
 local Scroller = Instance.new("ScrollingFrame")
 Scroller.Size = UDim2.new(1, 0, 1, -80)
-Scroller.Position = UDim2.new(0, 0, 0, 30)
+Scroller.Position = UDim2.new(0, 0, 0, 0)
 Scroller.CanvasSize = UDim2.new(0, 0, 0, 0)
 Scroller.ScrollBarThickness = 6
 Scroller.BackgroundTransparency = 1
-Scroller.Parent = MainFrame
+Scroller.Parent = ContentFrame
 
 local UIListLayout = Instance.new("UIListLayout")
 UIListLayout.Parent = Scroller
@@ -49,7 +75,7 @@ SaveBtn.Position = UDim2.new(0, 0, 1, -50)
 SaveBtn.BackgroundColor3 = Color3.fromRGB(100, 0, 200)
 SaveBtn.TextColor3 = Color3.new(1,1,1)
 SaveBtn.Text = "➕ Save Current Location"
-SaveBtn.Parent = MainFrame
+SaveBtn.Parent = ContentFrame
 
 -- Clickable credit button
 local Credit = Instance.new("TextButton")
@@ -59,12 +85,10 @@ Credit.BackgroundTransparency = 1
 Credit.TextColor3 = Color3.fromRGB(180, 180, 180)
 Credit.Text = "Made by Hasponix"
 Credit.TextScaled = true
-Credit.Parent = MainFrame
+Credit.Parent = ContentFrame
 
--- When clicked, opens link
 Credit.MouseButton1Click:Connect(function()
-    -- Change this link to your Discord, YouTube, etc.
-    setclipboard("https://discord.gg/fPmx6jHr") 
+    setclipboard("https://discord.gg/fPmx6jHr")
     game:GetService("StarterGui"):SetCore("SendNotification", {
         Title = "Credit";
         Text = "Link copied to clipboard!";
@@ -87,7 +111,6 @@ local function refreshList()
 
         local tpBtn = Instance.new("TextButton")
         tpBtn.Size = UDim2.new(0.75, 0, 1, 0)
-        tpBtn.Position = UDim2.new(0, 0, 0, 0)
         tpBtn.BackgroundColor3 = Color3.fromRGB(70, 70, 70)
         tpBtn.TextColor3 = Color3.new(1,1,1)
         tpBtn.Text = "Spawn "..i
@@ -121,5 +144,20 @@ SaveBtn.MouseButton1Click:Connect(function()
         local pos = player.Character.HumanoidRootPart.CFrame
         table.insert(savedSpawns, pos)
         refreshList()
+    end
+end)
+
+-- Minimize / Maximize logic
+local minimized = false
+MinimizeBtn.MouseButton1Click:Connect(function()
+    minimized = not minimized
+    if minimized then
+        ContentFrame.Visible = false
+        MainFrame.Size = UDim2.new(0,220,0,30)
+        MinimizeBtn.Text = "+"
+    else
+        ContentFrame.Visible = true
+        MainFrame.Size = UDim2.new(0,220,0,320)
+        MinimizeBtn.Text = "-"
     end
 end)
