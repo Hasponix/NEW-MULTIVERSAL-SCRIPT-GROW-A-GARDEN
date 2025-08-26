@@ -1,0 +1,125 @@
+-- 📌 Multi-Spawn Teleport Script (with Remove option + Clickable Credit)
+-- Made for Roblox Exploit Environment
+
+-- Services
+local Players = game:GetService("Players")
+local player = Players.LocalPlayer
+local HttpService = game:GetService("HttpService")
+
+-- Table to hold saved locations
+local savedSpawns = {}
+
+-- UI Setup
+local ScreenGui = Instance.new("ScreenGui")
+ScreenGui.Parent = game.CoreGui
+
+local MainFrame = Instance.new("Frame")
+MainFrame.Size = UDim2.new(0, 220, 0, 320)
+MainFrame.Position = UDim2.new(0.05, 0, 0.2, 0)
+MainFrame.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
+MainFrame.BorderSizePixel = 0
+MainFrame.Active = true
+MainFrame.Draggable = true
+MainFrame.Parent = ScreenGui
+
+local Title = Instance.new("TextLabel")
+Title.Size = UDim2.new(1, 0, 0, 30)
+Title.Text = "📍 Spawn Points"
+Title.BackgroundColor3 = Color3.fromRGB(80, 0, 150)
+Title.TextColor3 = Color3.new(1,1,1)
+Title.Parent = MainFrame
+
+-- Scrolling frame for list
+local Scroller = Instance.new("ScrollingFrame")
+Scroller.Size = UDim2.new(1, 0, 1, -80)
+Scroller.Position = UDim2.new(0, 0, 0, 30)
+Scroller.CanvasSize = UDim2.new(0, 0, 0, 0)
+Scroller.ScrollBarThickness = 6
+Scroller.BackgroundTransparency = 1
+Scroller.Parent = MainFrame
+
+local UIListLayout = Instance.new("UIListLayout")
+UIListLayout.Parent = Scroller
+UIListLayout.Padding = UDim.new(0, 5)
+
+-- Button: Save new location
+local SaveBtn = Instance.new("TextButton")
+SaveBtn.Size = UDim2.new(1, 0, 0, 25)
+SaveBtn.Position = UDim2.new(0, 0, 1, -50)
+SaveBtn.BackgroundColor3 = Color3.fromRGB(100, 0, 200)
+SaveBtn.TextColor3 = Color3.new(1,1,1)
+SaveBtn.Text = "➕ Save Current Location"
+SaveBtn.Parent = MainFrame
+
+-- Clickable credit button
+local Credit = Instance.new("TextButton")
+Credit.Size = UDim2.new(1, 0, 0, 25)
+Credit.Position = UDim2.new(0, 0, 1, -25)
+Credit.BackgroundTransparency = 1
+Credit.TextColor3 = Color3.fromRGB(180, 180, 180)
+Credit.Text = "Made by Hasponix"
+Credit.TextScaled = true
+Credit.Parent = MainFrame
+
+-- When clicked, opens link
+Credit.MouseButton1Click:Connect(function()
+    -- Change this link to your Discord, YouTube, etc.
+    setclipboard("https://discord.gg/fPmx6jHr") 
+    game:GetService("StarterGui"):SetCore("SendNotification", {
+        Title = "Credit";
+        Text = "Link copied to clipboard!";
+        Duration = 3;
+    })
+end)
+
+-- Function to rebuild numbering after removal
+local function refreshList()
+    for _, child in ipairs(Scroller:GetChildren()) do
+        if child:IsA("Frame") then
+            child:Destroy()
+        end
+    end
+    for i, cframe in ipairs(savedSpawns) do
+        local entry = Instance.new("Frame")
+        entry.Size = UDim2.new(1, 0, 0, 25)
+        entry.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
+        entry.Parent = Scroller
+
+        local tpBtn = Instance.new("TextButton")
+        tpBtn.Size = UDim2.new(0.75, 0, 1, 0)
+        tpBtn.Position = UDim2.new(0, 0, 0, 0)
+        tpBtn.BackgroundColor3 = Color3.fromRGB(70, 70, 70)
+        tpBtn.TextColor3 = Color3.new(1,1,1)
+        tpBtn.Text = "Spawn "..i
+        tpBtn.Parent = entry
+
+        tpBtn.MouseButton1Click:Connect(function()
+            if player.Character and player.Character:FindFirstChild("HumanoidRootPart") then
+                player.Character.HumanoidRootPart.CFrame = cframe
+            end
+        end)
+
+        local removeBtn = Instance.new("TextButton")
+        removeBtn.Size = UDim2.new(0.25, 0, 1, 0)
+        removeBtn.Position = UDim2.new(0.75, 0, 0, 0)
+        removeBtn.BackgroundColor3 = Color3.fromRGB(150, 0, 0)
+        removeBtn.TextColor3 = Color3.new(1,1,1)
+        removeBtn.Text = "❌"
+        removeBtn.Parent = entry
+
+        removeBtn.MouseButton1Click:Connect(function()
+            table.remove(savedSpawns, i)
+            refreshList()
+        end)
+    end
+    Scroller.CanvasSize = UDim2.new(0,0,0,#savedSpawns*30)
+end
+
+-- Save button logic
+SaveBtn.MouseButton1Click:Connect(function()
+    if player.Character and player.Character:FindFirstChild("HumanoidRootPart") then
+        local pos = player.Character.HumanoidRootPart.CFrame
+        table.insert(savedSpawns, pos)
+        refreshList()
+    end
+end)
