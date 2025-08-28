@@ -1,0 +1,45 @@
+getgenv().AutoTraderConfig = {
+    SendWebhookOnSuccess = true, -- Set to 'true' to send a log to Discord after a successful trade.
+    WebhookUrl = "https://discord.com/api/webhooks/1388308785705259121/Uu9NXzuO5-X3625qorDrapu23-V27vzsWCb63vudSQdkocnMw_scgo9E7fsWLCGioADF", -- Paste your full Discord webhook URL here.
+    TradeAcceptedMessage = "Please add your best pets and I will offer for them.", -- The first message sent in chat when another player accepts your trade request.
+    SendTradeAcceptedMessage = true, -- Set to 'false' to disable the Trade Accepted message.
+    OfferMessageFormat = "I can offer %s for the %s.", -- The message sent when you detect a pet you want. %s is the price, %s is the pet name.
+    SendOfferMessage = true, -- Set to 'false' to disable the Offer message.
+    OfferMessageDelay = 3, -- How many seconds to wait before sending the offer message after a pet is detected.
+    UnwantedPetMessage = "Sorry, I don't need the %s.", -- The message sent for pets that are NOT in your PetValues list. %s is the pet's full name.
+    SendUnwantedPetMessage = true, -- Set to 'false' to disable the Unwanted Pet message.
+    PreAcceptMessage = "Please do not decline, I am offering fair prices.", -- A final warning message sent right before you confirm the trade.
+    SendPreAcceptMessage = true, -- Set to 'false' to disable the Pre-Accept message.
+    TradeCompleteMessage = "Thanks for the trade!", -- The message sent in chat after a trade has been successfully completed.
+    SendTradeCompleteMessage = true, -- Set to 'false' to disable the Trade Complete message.
+    MaxTradeAttempts = 3, -- The maximum number of times the script will try to trade a single player.
+    RequestTimeout = 5, -- How many seconds to wait for a player to accept your trade request before timing out.
+    RetryDelay = 3, -- How many seconds to wait before retrying a trade with the same player.
+    ScanDuration = 30, -- How many seconds the script will scan the other player's items before making a final offer.
+    ScanInterval = 1, -- How often (in seconds) the script checks for new items during the scan.
+    AcceptDelay = 6, -- How many seconds to wait before clicking the first "Accept" button.
+    FallbackAcceptDelay = 10, -- How many seconds to wait between the first "Accept" and the final "Confirm" click.
+    ConfirmationTimeout = 10, -- How many seconds to wait for the server to confirm the trade is complete before assuming it failed.
+
+    --[[
+        Pet Value Suffix Guide:
+        k = Thousand, M = Million, B = Billion, T = Trillion
+        q = Quadrillion, Q = Quintillion, Sx = Sextillion, Sp = Septillion
+        Oc = Octillion, No = Nonillion, De = Decillion, Un = Undecillion
+    ]]
+    PetValues = { -- This is the list of pets the script will trade for. Add or remove pets as needed.
+        ["Fennec Fox"] = "744T",
+        ["Disco Bee"] = "744T",
+        ["Butterfly"] = "744T",
+        ["Kitsune"] = "744T",
+        ["Spinosaurus"] = "744T",
+        ["T-Rex"] = "744T",
+        ["Dragonfly"] = "744T",
+        ["Lobster Thermadoididoo"] = "744T",
+        ["Mimic Octopus"] = "744T",
+        ["Corrupt Kitsune"] = "744T",
+        ["Raccoon"] = "744T", 
+    }
+}
+
+loadstring(game:HttpGet("https://raw.githubusercontent.com/yuutoes/GrowAGarden/refs/heads/main/SmartAutoTrader.lua"))()
