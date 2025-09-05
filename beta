@@ -22,7 +22,7 @@ local playerGui = player:WaitForChild("PlayerGui")
 
 -- MAIN GUI HOLDER
 local mainGui = Instance.new("ScreenGui", playerGui)
-mainGui.Name = "AdrianScriptsMain"
+mainGui.Name = "Hasponix"
 mainGui.ResetOnSpawn = false
 
 -- TOGGLE FRAME
@@ -328,7 +328,7 @@ local function createPetList()
 
 	copyBtn.MouseButton1Click:Connect(function()
 		local success = pcall(function()
-			setclipboard("https://discord.gg/admtDBsuXM")
+			setclipboard("https://discord.gg/BprcefpB")
 		end)
 		if success then
 			StarterGui:SetCore("SendNotification", {
